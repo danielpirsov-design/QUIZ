@@ -1,0 +1,23 @@
+packages:
+  "framer-motion": "Animations and playful page transitions for the gamified experience"
+  "recharts": "Beautiful charts for the analytics and teacher dashboards"
+  "react-confetti": "Celebration effects for game completion and correct answers"
+  "date-fns": "Formatting dates for recent games and quizzes"
+  "clsx": "Classname utility for components"
+  "tailwind-merge": "Merging tailwind classes safely"
+
+images:
+  - path: "artifacts/qwizds/public/images/hero-bg.png"
+    description: "Vibrant abstract 3d geometric shapes floating, gamified aesthetic, bright electric purple and coral colors on a clean background"
+    aspect_ratio: "16:9"
+  - path: "artifacts/qwizds/public/images/auth-bg.png"
+    description: "Playful colorful abstract background with subtle grid, glowing spheres and floating blocks in cyan and magenta"
+    aspect_ratio: "16:9"
+  - path: "artifacts/qwizds/public/images/avatar-placeholder.png"
+    description: "Cute 3D stylized character avatar, playful and colorful, smiling, clean background"
+    aspect_ratio: "1:1"
+
+notes:
+  - Assumes polling for real-time game state since WebSockets aren't explicitly in the provided API spec.
+  - Using wouter for routing.
+  - Using @workspace/api-client-react for generated TanStack Query hooks.

@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "QWIZDS"
+version = "1.0.0"
+id = "artifacts/qwizds"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 20062
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/qwizds run dev"
+
+[services.env]
+PORT = "20062"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/qwizds", "run", "build"]
+publicDir = "artifacts/qwizds/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

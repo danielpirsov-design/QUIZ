@@ -1,0 +1,28 @@
+kind = "mobile"
+previewPath = "/mobile/"
+title = "QUIZDES Mobile"
+version = "1.0.0"
+id = "artifacts/qwizds-mobile"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+name = "expo"
+paths = [ "/mobile/" ]
+localPort = 22648
+
+[services.development]
+run = "pnpm --filter @workspace/qwizds-mobile run dev"
+ensurePreviewReachable = "/status"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/qwizds-mobile", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/qwizds-mobile", "run", "serve" ]
+
+[services.env]
+PORT = "22648"
+BASE_PATH = "/"
+BIND_DELAY_MS = "4000"

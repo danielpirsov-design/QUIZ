@@ -1,0 +1,39 @@
+New Question Types
+
+Free-text answers — players type the answer, AI grades it (great for spelling, dates, names)
+Ordering questions — drag items into the correct sequence
+Matching pairs — connect terms to definitions
+Audio questions — play a sound clip or music, players guess
+Poll mode — non-scored opinion questions with live word cloud
+New Game Modes
+
+Team Mode — split players into teams, compete collectively; great for classroom management
+Assignment Mode — teacher assigns a quiz as homework with a deadline; players complete it solo on their own time
+Relay Race — each team member answers one question in a chain; miss your answer and you cost your team
+AI Features
+
+Generate from document — paste text or upload a PDF, AI extracts questions automatically
+AI hint system — players can tap "Hint" for a clue, but it costs points
+Explanation mode — after each question, AI shows a short explanation of why the answer is correct
+Difficulty slider — AI rewrites your quiz harder or easier on demand
+Teacher Tools
+
+Class management — create classes, track each student's performance over time across multiple games
+Progress dashboard — see which questions students struggle with most
+Export results — download game results as CSV or PDF for gradebooks
+Question bank — save individual questions to reuse across quizzes
+Player Experience
+
+Persistent profile & XP — earn experience across all games played, unlock badges and ranks
+Game recap screen — after the game ends, review every question with correct answers and explanations
+Reaction emojis — players send quick emoji reactions (🔥 😱 🤔) during the game, shown on host screen
+Spectator link — shareable read-only "big screen" URL for projectors or parents watching
+Growth
+
+Public quiz library — browse community quizzes by subject, grade, language; fork and customize any quiz
+Google Classroom sync — import roster, push grades back automatically
+Scheduled games — set a game to auto-open at a specific time (for tests)
+Which of these interests you most? I can start building any of them right away.
+
+
+Scroll to latest

@@ -1,0 +1,26 @@
+const C = {
+  purple: "#46178F",
+  purpleDeep: "#1a0050",
+  purpleDark: "#2d0a7a",
+  purpleMid: "#5c22b5",
+  yellow: "#FFCC02",
+  yellowDim: "rgba(255,204,2,0.15)",
+  white: "#FFFFFF",
+  whiteHigh: "rgba(255,255,255,0.9)",
+  whiteMid: "rgba(255,255,255,0.55)",
+  whiteLow: "rgba(255,255,255,0.25)",
+  whiteXLow: "rgba(255,255,255,0.08)",
+  surface: "rgba(255,255,255,0.07)",
+  surfaceBright: "rgba(255,255,255,0.12)",
+  border: "rgba(255,255,255,0.1)",
+  red: "#e53935",
+  green: "#22c55e",
+  orange: "#f97316",
+  blue: "#3b82f6",
+  answerA: "#e21b3c",
+  answerB: "#1368ce",
+  answerC: "#d89e00",
+  answerD: "#26890c",
+};
+
+export default C;

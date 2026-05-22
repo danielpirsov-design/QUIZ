@@ -1,0 +1,149 @@
+modules = ["nodejs-24", "postgresql-16"]
+
+[[artifacts]]
+id = "artifacts/api-server"
+
+[[artifacts]]
+id = "artifacts/mockup-sandbox"
+
+[deployment]
+router = "application"
+deploymentTarget = "autoscale"
+build = ["bash", "-c", "BASE_PATH=/ pnpm --filter @workspace/qwizds run build && pnpm --filter @workspace/api-server run build"]
+run = ["bash", "-c", "NODE_ENV=production node artifacts/api-server/dist/index.cjs"]
+
+[deployment.postBuild]
+args = ["pnpm", "store", "prune"]
+env = { "CI" = "true" }
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "QUIZDES Mobile Preview"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "BASE_PATH=/ PORT=22648 EXPO_PUBLIC_DOMAIN=$REPLIT_DEV_DOMAIN node /home/runner/workspace/artifacts/qwizds-mobile/scripts/web-dev.js"
+
+[[workflows.workflow]]
+name = "artifacts/qwizds: web"
+author = "agent"
+mode = "sequential"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+artifactId = "artifacts/qwizds"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/qwizds run dev"
+cwd = "./artifacts/qwizds"
+waitForPort = 20062
+router = "path"
+
+[workflows.workflow.tasks.env]
+PORT = "20062"
+BASE_PATH = "/"
+
+[[workflows.workflow]]
+name = "artifacts/api-server: API Server"
+author = "agent"
+mode = "sequential"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+artifactId = "3B4_FFSkEVBkAeYMFRJ2e"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/api-server run dev"
+cwd = "./artifacts/api-server"
+waitForPort = 8080
+
+[workflows.workflow.tasks.env]
+PORT = "8080"
+
+[[workflows.workflow]]
+name = "artifacts/mockup-sandbox: Component Preview Server"
+author = "agent"
+mode = "sequential"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+artifactId = "XegfDyZt7HqfW2Bb8Ghoy"
+isCanvasWorkflow = true
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/mockup-sandbox run dev"
+cwd = "./artifacts/mockup-sandbox"
+waitForPort = 8081
+
+[workflows.workflow.tasks.env]
+PORT = "8081"
+BASE_PATH = "/__mockup"
+
+[[workflows.workflow]]
+name = "artifacts/qwizds-mobile: expo"
+author = "agent"
+mode = "sequential"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+artifactId = "artifacts/qwizds-mobile"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pnpm --filter @workspace/qwizds-mobile run dev"
+cwd = "./artifacts/qwizds-mobile"
+waitForPort = 22648
+router = "expo-domain"
+
+[workflows.workflow.tasks.env]
+PORT = "22648"
+BASE_PATH = "/"
+
+[agent]
+stack = "PNPM_WORKSPACE"
+expertMode = true
+integrations = ["resend:1.0.0"]
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 20000
+
+[nix]
+channel = "stable-25_05"
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
+localPort = 8082
+externalPort = 3002
+
+[[ports]]
+localPort = 8083
+externalPort = 3003
+
+[[ports]]
+localPort = 20062
+externalPort = 3000
+
+[[ports]]
+localPort = 20063
+externalPort = 3001
+
+[[ports]]
+localPort = 20064
+externalPort = 80
+
+[objectStorage]
+defaultBucketID = "replit-objstore-a5ab1c39-cad7-4581-8f89-1bd26b9ddc50"

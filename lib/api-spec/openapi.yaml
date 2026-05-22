@@ -1,0 +1,1341 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: QWIZDS API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: quizzes
+    description: Quiz management
+  - name: questions
+    description: Question management
+  - name: games
+    description: Game session management
+  - name: ai
+    description: AI-powered features
+  - name: analytics
+    description: Analytics and results
+  - name: leaderboard
+    description: Leaderboards and scores
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email already in use
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /quizzes:
+    get:
+      operationId: listQuizzes
+      tags: [quizzes]
+      summary: List quizzes
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: visibility
+          in: query
+          schema:
+            type: string
+            enum: [public, private, all]
+      responses:
+        "200":
+          description: List of quizzes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quiz"
+    post:
+      operationId: createQuiz
+      tags: [quizzes]
+      summary: Create a quiz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+
+  /quizzes/{id}:
+    get:
+      operationId: getQuiz
+      tags: [quizzes]
+      summary: Get a quiz by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizWithQuestions"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateQuiz
+      tags: [quizzes]
+      summary: Update a quiz
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Quiz"
+    delete:
+      operationId: deleteQuiz
+      tags: [quizzes]
+      summary: Delete a quiz
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /quizzes/{id}/questions:
+    get:
+      operationId: listQuestions
+      tags: [questions]
+      summary: List questions for a quiz
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+    post:
+      operationId: addQuestion
+      tags: [questions]
+      summary: Add a question to a quiz
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuestionBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+
+  /quizzes/{id}/questions/{questionId}:
+    patch:
+      operationId: updateQuestion
+      tags: [questions]
+      summary: Update a question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuestionBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+    delete:
+      operationId: deleteQuestion
+      tags: [questions]
+      summary: Delete a question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /games:
+    get:
+      operationId: listGames
+      tags: [games]
+      summary: List game sessions for current user
+      responses:
+        "200":
+          description: Games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameSession"
+    post:
+      operationId: createGame
+      tags: [games]
+      summary: Create/host a new game session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGameBody"
+      responses:
+        "201":
+          description: Created game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+
+  /games/{id}:
+    get:
+      operationId: getGame
+      tags: [games]
+      summary: Get game session by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Game session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /games/join/{pin}:
+    get:
+      operationId: getGameByPin
+      tags: [games]
+      summary: Get game session by PIN
+      parameters:
+        - name: pin
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Game session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+        "404":
+          description: Game not found or not active
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /games/{id}/start:
+    post:
+      operationId: startGame
+      tags: [games]
+      summary: Start a game session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+
+  /games/{id}/end:
+    post:
+      operationId: endGame
+      tags: [games]
+      summary: End a game session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Ended
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSession"
+
+  /games/{id}/participants:
+    get:
+      operationId: listParticipants
+      tags: [games]
+      summary: List participants in a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Participants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Participant"
+    post:
+      operationId: joinGame
+      tags: [games]
+      summary: Join a game as participant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JoinGameBody"
+      responses:
+        "201":
+          description: Joined
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Participant"
+
+  /games/{id}/answer:
+    post:
+      operationId: submitAnswer
+      tags: [games]
+      summary: Submit an answer during a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitAnswerBody"
+      responses:
+        "200":
+          description: Answer result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnswerResult"
+
+  /games/{id}/results:
+    get:
+      operationId: getGameResults
+      tags: [analytics]
+      summary: Get final results and scores for a game
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Game results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResults"
+
+  /ai/generate-quiz:
+    post:
+      operationId: generateQuiz
+      tags: [ai]
+      summary: AI-generate a full quiz from topic or text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateQuizBody"
+      responses:
+        "200":
+          description: Generated quiz
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedQuiz"
+
+  /ai/improve-question:
+    post:
+      operationId: improveQuestion
+      tags: [ai]
+      summary: AI-improve an existing question
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImproveQuestionBody"
+      responses:
+        "200":
+          description: Improved question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImprovedQuestion"
+
+  /ai/chat:
+    post:
+      operationId: aiChat
+      tags: [ai]
+      summary: Chat with AI assistant about quizzes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AiChatBody"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiChatResponse"
+
+  /analytics/dashboard:
+    get:
+      operationId: getDashboardStats
+      tags: [analytics]
+      summary: Get dashboard statistics for the current user
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /analytics/quiz/{id}:
+    get:
+      operationId: getQuizAnalytics
+      tags: [analytics]
+      summary: Get analytics for a specific quiz
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Quiz analytics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizAnalytics"
+
+  /leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboard]
+      summary: Get global leaderboard
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Leaderboard
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /discover:
+    get:
+      operationId: discoverQuizzes
+      tags: [quizzes]
+      summary: Discover public quizzes
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Public quizzes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Quiz"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+        - success
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+          enum: [teacher, student, creator]
+        displayName:
+          type: string
+        totalPoints:
+          type: integer
+        gamesPlayed:
+          type: integer
+        quizzesCreated:
+          type: integer
+        avatarUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - username
+        - role
+        - displayName
+        - totalPoints
+        - gamesPlayed
+        - quizzesCreated
+        - createdAt
+
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        displayName:
+          type: string
+        role:
+          type: string
+          enum: [teacher, student, creator]
+      required:
+        - email
+        - username
+        - password
+        - displayName
+        - role
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    Quiz:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        visibility:
+          type: string
+          enum: [public, private]
+        questionCount:
+          type: integer
+        timesPlayed:
+          type: integer
+        creatorId:
+          type: integer
+        creatorName:
+          type: string
+        coverImageUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - visibility
+        - questionCount
+        - timesPlayed
+        - creatorId
+        - creatorName
+        - createdAt
+        - updatedAt
+
+    QuizWithQuestions:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        visibility:
+          type: string
+          enum: [public, private]
+        questionCount:
+          type: integer
+        timesPlayed:
+          type: integer
+        creatorId:
+          type: integer
+        creatorName:
+          type: string
+        coverImageUrl:
+          type: ["string", "null"]
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - visibility
+        - questionCount
+        - timesPlayed
+        - creatorId
+        - creatorName
+        - questions
+        - createdAt
+        - updatedAt
+
+    CreateQuizBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        visibility:
+          type: string
+          enum: [public, private]
+        coverImageUrl:
+          type: string
+      required:
+        - title
+        - visibility
+
+    UpdateQuizBody:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        visibility:
+          type: string
+          enum: [public, private]
+        coverImageUrl:
+          type: string
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+        quizId:
+          type: integer
+        questionText:
+          type: string
+        questionType:
+          type: string
+          enum: [multiple_choice, true_false, short_answer]
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: ["string", "null"]
+        timeLimit:
+          type: integer
+        points:
+          type: integer
+        imageUrl:
+          type: ["string", "null"]
+        orderIndex:
+          type: integer
+      required:
+        - id
+        - quizId
+        - questionText
+        - questionType
+        - options
+        - correctAnswer
+        - timeLimit
+        - points
+        - orderIndex
+
+    CreateQuestionBody:
+      type: object
+      properties:
+        questionText:
+          type: string
+        questionType:
+          type: string
+          enum: [multiple_choice, true_false, short_answer]
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: string
+        timeLimit:
+          type: integer
+        points:
+          type: integer
+        imageUrl:
+          type: string
+        orderIndex:
+          type: integer
+      required:
+        - questionText
+        - questionType
+        - options
+        - correctAnswer
+
+    UpdateQuestionBody:
+      type: object
+      properties:
+        questionText:
+          type: string
+        questionType:
+          type: string
+          enum: [multiple_choice, true_false, short_answer]
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: string
+        timeLimit:
+          type: integer
+        points:
+          type: integer
+        imageUrl:
+          type: string
+        orderIndex:
+          type: integer
+
+    GameSession:
+      type: object
+      properties:
+        id:
+          type: integer
+        quizId:
+          type: integer
+        quizTitle:
+          type: string
+        hostId:
+          type: integer
+        pin:
+          type: string
+        status:
+          type: string
+          enum: [waiting, active, ended]
+        gameMode:
+          type: string
+          enum: [live, solo, timed, multiplayer]
+        currentQuestion:
+          type: ["integer", "null"]
+        participantCount:
+          type: integer
+        startedAt:
+          type: ["string", "null"]
+          format: date-time
+        endedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - quizId
+        - quizTitle
+        - hostId
+        - pin
+        - status
+        - gameMode
+        - participantCount
+        - createdAt
+
+    CreateGameBody:
+      type: object
+      properties:
+        quizId:
+          type: integer
+        gameMode:
+          type: string
+          enum: [live, solo, timed, multiplayer]
+      required:
+        - quizId
+        - gameMode
+
+    JoinGameBody:
+      type: object
+      properties:
+        nickname:
+          type: string
+      required:
+        - nickname
+
+    Participant:
+      type: object
+      properties:
+        id:
+          type: integer
+        gameId:
+          type: integer
+        userId:
+          type: ["integer", "null"]
+        nickname:
+          type: string
+        score:
+          type: integer
+        correctAnswers:
+          type: integer
+        totalAnswers:
+          type: integer
+        rank:
+          type: ["integer", "null"]
+        joinedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - gameId
+        - nickname
+        - score
+        - correctAnswers
+        - totalAnswers
+        - joinedAt
+
+    SubmitAnswerBody:
+      type: object
+      properties:
+        questionId:
+          type: integer
+        answer:
+          type: string
+        participantId:
+          type: integer
+        timeSpent:
+          type: integer
+      required:
+        - questionId
+        - answer
+        - participantId
+
+    AnswerResult:
+      type: object
+      properties:
+        correct:
+          type: boolean
+        correctAnswer:
+          type: string
+        explanation:
+          type: ["string", "null"]
+        pointsEarned:
+          type: integer
+        totalScore:
+          type: integer
+        rank:
+          type: integer
+      required:
+        - correct
+        - correctAnswer
+        - pointsEarned
+        - totalScore
+        - rank
+
+    GameResults:
+      type: object
+      properties:
+        gameId:
+          type: integer
+        quizTitle:
+          type: string
+        totalParticipants:
+          type: integer
+        participants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Participant"
+      required:
+        - gameId
+        - quizTitle
+        - totalParticipants
+        - participants
+
+    GenerateQuizBody:
+      type: object
+      properties:
+        topic:
+          type: string
+        text:
+          type: string
+        questionCount:
+          type: integer
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        questionTypes:
+          type: array
+          items:
+            type: string
+      required:
+        - topic
+
+    GeneratedQuiz:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeneratedQuestion"
+      required:
+        - title
+        - description
+        - questions
+
+    GeneratedQuestion:
+      type: object
+      properties:
+        questionText:
+          type: string
+        questionType:
+          type: string
+          enum: [multiple_choice, true_false, short_answer]
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: string
+        timeLimit:
+          type: integer
+        points:
+          type: integer
+      required:
+        - questionText
+        - questionType
+        - options
+        - correctAnswer
+        - explanation
+        - timeLimit
+        - points
+
+    ImproveQuestionBody:
+      type: object
+      properties:
+        questionText:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        feedback:
+          type: string
+      required:
+        - questionText
+        - correctAnswer
+
+    ImprovedQuestion:
+      type: object
+      properties:
+        questionText:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+        correctAnswer:
+          type: string
+        explanation:
+          type: string
+        improvements:
+          type: string
+      required:
+        - questionText
+        - options
+        - correctAnswer
+        - explanation
+        - improvements
+
+    AiChatBody:
+      type: object
+      properties:
+        message:
+          type: string
+        context:
+          type: string
+      required:
+        - message
+
+    AiChatResponse:
+      type: object
+      properties:
+        reply:
+          type: string
+      required:
+        - reply
+
+    DashboardStats:
+      type: object
+      properties:
+        totalQuizzes:
+          type: integer
+        totalGamesHosted:
+          type: integer
+        totalParticipants:
+          type: integer
+        totalPointsEarned:
+          type: integer
+        recentGames:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameSession"
+        recentQuizzes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Quiz"
+      required:
+        - totalQuizzes
+        - totalGamesHosted
+        - totalParticipants
+        - totalPointsEarned
+        - recentGames
+        - recentQuizzes
+
+    QuizAnalytics:
+      type: object
+      properties:
+        quizId:
+          type: integer
+        quizTitle:
+          type: string
+        totalPlays:
+          type: integer
+        avgScore:
+          type: number
+        avgCompletionRate:
+          type: number
+        questionStats:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionStat"
+      required:
+        - quizId
+        - quizTitle
+        - totalPlays
+        - avgScore
+        - avgCompletionRate
+        - questionStats
+
+    QuestionStat:
+      type: object
+      properties:
+        questionId:
+          type: integer
+        questionText:
+          type: string
+        correctRate:
+          type: number
+        avgTimeSpent:
+          type: number
+      required:
+        - questionId
+        - questionText
+        - correctRate
+        - avgTimeSpent
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: integer
+        displayName:
+          type: string
+        username:
+          type: string
+        totalPoints:
+          type: integer
+        gamesPlayed:
+          type: integer
+        avatarUrl:
+          type: ["string", "null"]
+      required:
+        - rank
+        - userId
+        - displayName
+        - username
+        - totalPoints
+        - gamesPlayed

@@ -1,0 +1,158 @@
+2026-03-19 15:45:28.32
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 15:45:28.53
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:45:32.53
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 15:45:32.54
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-4Q3Aw8gZ.js
+2026-03-19 15:45:32.74
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/favicon.svg
+2026-03-19 15:45:34.44
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-4Q3Aw8gZ.js
+2026-03-19 15:45:34.46
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-BcBwxMZ4.css
+2026-03-19 15:45:34.66
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:45:35.19
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-4Q3Aw8gZ.js
+2026-03-19 15:45:35.19
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 15:45:35.39
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:45:40.32
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-4Q3Aw8gZ.js
+2026-03-19 15:45:40.33
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-BcBwxMZ4.css
+2026-03-19 15:45:40.53
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:45:41.15
+cdae9134
+System
+static handler not found for matched path path=/assets/index-4Q3Aw8gZ.js matchedPrefix=/
+2026-03-19 15:45:41.16
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 15:45:41.35
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:45:42.90
+cdae9134
+System
+static handler not found for matched path path=/assets/index-4Q3Aw8gZ.js matchedPrefix=/
+2026-03-19 15:45:42.92
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 15:45:43.11
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+2026-03-19 15:46:08.61
+cdae9134
+System
+static handler not found for matched path path=/ matchedPrefix=/
+2026-03-19 15:47:25.05
+cdae9134
+System
+static handler not found for matched path path=/ matchedPrefix=/
+2026-03-19 15:47:32.75
+cdae9134
+System
+static handler not found for matched path path=/ matchedPrefix=/
+2026-03-19 15:47:33.20
+cdae9134
+System
+static handler not found for matched path path=/favicon.ico matchedPrefix=/
+2026-03-19 15:52:41.78
+cdae9134
+System
+sending SIGTERM to artifact process artifact=artifacts/api-server
+2026-03-19 15:52:41.78
+cdae9134
+System
+received signal, shutting down artifact processes signal=terminated
+2026-03-19 15:52:41.78
+cdae9134
+System
+all artifact processes stopped
+2026-03-19 15:52:41.78
+cdae9134
+System
+main done, exiting
+2026-03-19 15:52:41.78
+cdae9134
+System
+artifact process exited with error artifact=artifacts/api-server error=signal: terminated
+2026-03-19 15:57:17.91
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/robots.txt
+2026-03-19 15:57:18.00
+cdae9134
+System
+static handler not found for matched path path=/robots.txt matchedPrefix=/
+2026-03-19 15:58:15.55
+cdae9134
+System
+static handler not found for matched path path=/ matchedPrefix=/
+2026-03-19 15:58:15.61
+cdae9134
+System
+static handler not found for matched path path=/favicon.ico matchedPrefix=/
+2026-03-19 15:58:15.67
+cdae9134
+System
+static handler not found for matched path path=/favicon.png matchedPrefix=/
+2026-03-19 16:10:17.35
+cdae9134
+System
+static handler not found for matched path path=/ matchedPrefix=/
+2026-03-19 16:10:17.81
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/favicon.ico
+2026-03-19 16:16:52.52
+cdae9134
+System
+static handler not found for matched path path=/assets/index-BcBwxMZ4.css matchedPrefix=/
+2026-03-19 16:16:52.53
+cdae9134
+System
+static handler not found for matched path matchedPrefix=/ path=/assets/index-4Q3Aw8gZ.js
+2026-03-19 16:16:52.77
+cdae9134
+System
+static handler not found for matched path path=/favicon.svg matchedPrefix=/
+Wrap
+Colors
