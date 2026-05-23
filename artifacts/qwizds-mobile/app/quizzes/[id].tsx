@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Pressable,
   ScrollView,
-  ActivityIndicator,
+ ActivityIndicator,
   Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -89,7 +89,7 @@ export default function QuizDetailScreen() {
   if (isLoading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color={C.primary} />
+        <ActivityIndicator size="large" color={C.purple} />
       </View>
     );
   }
@@ -142,7 +142,7 @@ export default function QuizDetailScreen() {
             </Text>
 
             {hostingMode === mode.key && (
-              <ActivityIndicator />
+              <ActivityIndicator color={C.purple} />
             )}
           </Pressable>
         ))}
@@ -169,7 +169,7 @@ export default function QuizDetailScreen() {
                     "help-circle") as any
                 }
                 size={18}
-                color={C.primary}
+                color={C.purple}
               />
 
               <Text style={styles.questionText}>
