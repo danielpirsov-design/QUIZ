@@ -51,3 +51,4 @@ Thumbs.db
 # Vercel — generated during build, not committed
 api/handler-bundle.cjs
 .config/
+.vercel
